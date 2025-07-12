@@ -1,5 +1,5 @@
 # Name of the workflow
-name: Deploy Website with API Token
+name: Deploy Website with API Token (Debug)
 
 on:
   # This workflow runs automatically on any push to the 'main' branch
@@ -32,27 +32,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      # --- THIS IS THE CRITICAL STEP THAT FIXES THE ERROR ---
-      # Step 2: Find the '%%HF_TOKEN%%' placeholder in index.html and replace it with your secret
+      # --- NEW DEBUGGING STEP ---
+      # Step 2: Check if the secret is accessible by the workflow
+      - name: Verify Secret Availability
+        run: |
+          if [ -z "${{ secrets.HF_TOKEN }}" ]; then
+            echo "::error file=.github/workflows/deploy.yml,line=41::HF_TOKEN secret not found. Please verify the secret name in repository Settings > Secrets and variables > Actions."
+            exit 1
+          else
+            echo "✅ HF_TOKEN secret was found successfully."
+          fi
+          
+      # Step 3: Find the '%%HF_TOKEN%%' placeholder in index.html and replace it with your secret
       - name: Replace API Token Placeholder
         run: |
           sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
-        # This command uses the 'sed' utility to perform the search-and-replace.
-        # It reads the value from the secret named HF_TOKEN that you configured in your repository settings.
           
-      # Step 3: Set up GitHub Pages
+      # Step 4: Set up GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
-      # Step 4: Build the artifact (your website files) to be deployed
+      # Step 5: Build the artifact (your website files) to be deployed
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload the current directory (which now includes the modified index.html)
           path: '.'
           
-      # Step 5: Deploy the artifact to GitHub Pages
+      # Step 6: Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
