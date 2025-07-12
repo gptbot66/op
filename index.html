@@ -54,6 +54,15 @@
         #loading-spinner {
             border-top-color: #4f46e5;
         }
+        /* Styles for the new tab navigation */
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            color: #c026d3;
+            border-bottom-color: #c026d3;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -68,93 +77,80 @@
                     </svg>
                     <span class="font-bold text-xl text-white">Illusion Diffusion HQ</span>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#image-generator" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Image Generator</a>
-                        <a href="#video-generator" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Video Generator</a>
-                        <a href="#gallery" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Gallery</a>
-                    </div>
-                </div>
             </div>
         </nav>
     </header>
 
     <!-- Main Content -->
     <main class="flex-grow">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             
             <!-- Hero Section -->
-            <div class="text-center mb-16">
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
                     Create Stunning <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-500">AI Illusions</span>
                 </h1>
                 <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400">
-                    Bring your imagination to life. Generate breathtaking, high-quality illusion artwork and videos with the power of Stable Diffusion.
+                    Your central hub for generating breathtaking artwork and videos with Stable Diffusion.
                 </p>
             </div>
 
             <!-- Generator Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                 
-                <!-- Controls Column -->
-                <div class="space-y-8 sticky top-24">
-                    <!-- Image Generator Card -->
-                    <div id="image-generator" class="glass-card rounded-xl p-6 shadow-lg">
-                        <form id="image-form">
-                            <h2 class="text-2xl font-bold mb-4 text-white">Image Generator</h2>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="prompt" class="block text-sm font-medium text-gray-300">Prompt</label>
-                                    <textarea id="prompt" name="prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A spiral staircase that transforms into a galaxy, hyperrealistic"></textarea>
-                                </div>
-                                <div>
-                                    <label for="hf-token" class="block text-sm font-medium text-gray-300">Hugging Face Token</label>
-                                    <input type="password" id="hf-token" name="hf-token" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" value="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">
-                                </div>
-                                <button type="submit" class="w-full btn-primary font-bold py-2 px-4 rounded-md text-white flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                                    Generate Image
-                                </button>
+                <!-- Controls Column with Tabs -->
+                <div class="glass-card rounded-xl p-6 shadow-lg">
+                    <!-- Tab Navigation -->
+                    <div class="mb-6 border-b border-gray-700">
+                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                            <button id="tab-image" class="tab-button active whitespace-nowrap py-4 px-1 text-base font-medium text-gray-300 hover:text-white">Image Generator</button>
+                            <button id="tab-video" class="tab-button whitespace-nowrap py-4 px-1 text-base font-medium text-gray-300 hover:text-white">Video Generator</button>
+                        </nav>
+                    </div>
+
+                    <!-- Image Generator Form -->
+                    <div id="content-image">
+                        <form id="image-form" class="space-y-4">
+                            <div>
+                                <label for="prompt" class="block text-sm font-medium text-gray-300">Prompt</label>
+                                <textarea id="prompt" name="prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A spiral staircase that transforms into a galaxy, hyperrealistic"></textarea>
                             </div>
+                            <div>
+                                <label for="hf-token" class="block text-sm font-medium text-gray-300">Hugging Face Token</label>
+                                <input type="password" id="hf-token" name="hf-token" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="Paste your token here (e.g., hf_...)">
+                                <p class="mt-1 text-xs text-gray-500">Your token is sent directly to the API and is not stored.</p>
+                            </div>
+                            <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">
+                                Generate Image
+                            </button>
                         </form>
                     </div>
 
-                    <!-- Video Generator Card -->
-                    <div id="video-generator" class="glass-card rounded-xl p-6 shadow-lg">
-                        <form id="video-form">
-                            <h2 class="text-2xl font-bold mb-4 text-white">Video Generator</h2>
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="video-prompt" class="block text-sm font-medium text-gray-300">Video Prompt</label>
-                                    <input type="text" id="video-prompt" name="video-prompt" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A time-lapse of a city built from clouds">
-                                </div>
-                                 <div>
-                                    <label for="video-hf-token" class="block text-sm font-medium text-gray-300">Hugging Face Token</label>
-                                    <input type="password" id="video-hf-token" name="video-hf-token" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" value="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">
-                                </div>
-                                <button type="submit" class="w-full btn-primary font-bold py-2 px-4 rounded-md text-white flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M15 10a5 5 0 11-10 0 5 5 0 0110 0z" /><path d="M12 10a2 2 0 11-4 0 2 2 0 014 0z" /><path d="M.464 4.043a1 1 0 011.414 0l1.414 1.414a1 1 0 01-1.414 1.414L.464 5.457a1 1 0 010-1.414zM4.043.464a1 1 0 011.414 0l1.414 1.414a1 1 0 01-1.414 1.414L4.043 1.878a1 1 0 010-1.414zM10 0a1 1 0 011 1v2a1 1 0 11-2 0V1a1 1 0 011-1zm5.957.464a1 1 0 010 1.414l-1.414 1.414a1 1 0 01-1.414-1.414l1.414-1.414a1 1 0 011.414 0zM15 10a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1zm-1.414 5.957a1 1 0 010-1.414l1.414-1.414a1 1 0 011.414 1.414l-1.414 1.414a1 1 0 01-1.414 0zM10 15a1 1 0 01-1 1v2a1 1 0 11-2 0v-2a1 1 0 011-1zm-5.957-1.414a1 1 0 010-1.414l1.414-1.414a1 1 0 011.414 1.414l-1.414 1.414a1 1 0 01-1.414 0z" /></svg>
-                                    Generate Video
-                                </button>
+                    <!-- Video Generator Form (Initially Hidden) -->
+                    <div id="content-video" class="hidden">
+                        <form id="video-form" class="space-y-4">
+                            <div>
+                                <label for="video-prompt" class="block text-sm font-medium text-gray-300">Video Prompt</label>
+                                <textarea id="video-prompt" name="video-prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A time-lapse of a city built from clouds"></textarea>
                             </div>
+                            <div>
+                                <label for="video-hf-token" class="block text-sm font-medium text-gray-300">Hugging Face Token</label>
+                                <input type="password" id="video-hf-token" name="video-hf-token" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="Paste your token here (e.g., hf_...)">
+                            </div>
+                            <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">
+                                Generate Video
+                            </button>
                         </form>
                     </div>
                 </div>
 
                 <!-- Display Column -->
-                <div id="gallery" class="glass-card rounded-xl p-4 shadow-lg min-h-[512px] flex items-center justify-center">
+                <div id="gallery" class="glass-card rounded-xl p-4 shadow-lg min-h-[400px] md:min-h-[512px] flex items-center justify-center">
                     <div id="artwork-display" class="w-full h-full flex flex-col items-center justify-center">
-                        <!-- Loading Spinner -->
                         <div id="loading-spinner" class="hidden animate-spin rounded-full h-16 w-16 border-4 border-gray-600 border-t-indigo-500 mb-4"></div>
-                        
-                        <!-- Status Messages -->
                         <p id="status-message" class="text-gray-400 text-center">Your generated artwork will appear here.</p>
-                        
-                        <!-- Result Display -->
                         <img id="result-image" src="" alt="Generated Artwork" class="hidden max-w-full max-h-full rounded-lg object-contain">
                         <video id="result-video" src="" controls class="hidden max-w-full max-h-full rounded-lg object-contain"></video>
-                        
-                        <!-- Error Message -->
                         <div id="error-message" class="hidden text-red-400 bg-red-900/50 p-4 rounded-md text-center"></div>
                     </div>
                 </div>
@@ -166,11 +162,6 @@
     <footer class="bg-gray-900/50 border-t border-gray-700/50 mt-16">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
             <p>&copy; 2025 Illusion Diffusion HQ. All rights reserved.</p>
-            <div class="mt-2">
-                <a href="#" class="hover:text-white mx-2">Privacy Policy</a>
-                <span class="text-gray-600">&bull;</span>
-                <a href="#" class="hover:text-white mx-2">Terms of Service</a>
-            </div>
         </div>
     </footer>
 
@@ -180,7 +171,6 @@
         const videoForm = document.getElementById('video-form');
         const promptInput = document.getElementById('prompt');
         const tokenInput = document.getElementById('hf-token');
-        const videoPromptInput = document.getElementById('video-prompt');
         
         const loadingSpinner = document.getElementById('loading-spinner');
         const statusMessage = document.getElementById('status-message');
@@ -188,13 +178,29 @@
         const resultVideo = document.getElementById('result-video');
         const errorMessage = document.getElementById('error-message');
 
+        const tabImage = document.getElementById('tab-image');
+        const tabVideo = document.getElementById('tab-video');
+        const contentImage = document.getElementById('content-image');
+        const contentVideo = document.getElementById('content-video');
+
         // API Configuration
         const IMAGE_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0";
-        const VIDEO_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-video-diffusion-img2vid-xt";
 
-        /**
-         * Resets the display area to its initial state
-         */
+        // Tab switching logic
+        tabImage.addEventListener('click', () => {
+            tabImage.classList.add('active');
+            tabVideo.classList.remove('active');
+            contentImage.classList.remove('hidden');
+            contentVideo.classList.add('hidden');
+        });
+
+        tabVideo.addEventListener('click', () => {
+            tabVideo.classList.add('active');
+            tabImage.classList.remove('active');
+            contentVideo.classList.remove('hidden');
+            contentImage.classList.add('hidden');
+        });
+
         function clearDisplay() {
             statusMessage.textContent = 'Your generated artwork will appear here.';
             statusMessage.classList.remove('hidden');
@@ -205,10 +211,6 @@
             resultVideo.src = '';
         }
 
-        /**
-         * Toggles the loading state of the UI
-         * @param {boolean} isLoading - Whether to show the loading spinner
-         */
         function setLoading(isLoading) {
             if (isLoading) {
                 clearDisplay();
@@ -218,10 +220,6 @@
             }
         }
 
-        /**
-         * Displays an error message to the user
-         * @param {string} message - The error message to display
-         */
         function displayError(message) {
             setLoading(false);
             statusMessage.classList.add('hidden');
@@ -229,10 +227,6 @@
             errorMessage.classList.remove('hidden');
         }
 
-        /**
-         * Handles the image generation form submission with a real API call.
-         * @param {Event} e - The form submission event
-         */
         async function handleImageGeneration(e) {
             e.preventDefault();
             const prompt = promptInput.value.trim();
@@ -251,7 +245,6 @@
             statusMessage.textContent = 'Generating... The model might be loading, which can take a minute.';
 
             try {
-                // Fetching the image from the Hugging Face Inference API
                 const response = await fetch(IMAGE_API_URL, {
                     method: 'POST',
                     headers: {
@@ -261,15 +254,12 @@
                     body: JSON.stringify({ inputs: prompt })
                 });
 
-                // Check if the request was successful
                 if (!response.ok) {
                     let errorMsg = `API Error: ${response.status} ${response.statusText}`;
                     try {
-                        // Hugging Face often returns detailed errors in JSON format
                         const errorBody = await response.json();
                         if (errorBody.error) {
                            errorMsg = `API Error: ${errorBody.error}`;
-                           // Provide helpful feedback if the model is just loading
                            if (errorBody.estimated_time) {
                                errorMsg += ` The model is currently loading. Please try again in about ${Math.ceil(errorBody.estimated_time)} seconds.`;
                            }
@@ -280,37 +270,25 @@
                     throw new Error(errorMsg);
                 }
 
-                // If successful, the response body is the image data (blob)
                 const blob = await response.blob();
                 
-                // Ensure the received data is an image
                 if (blob.type.startsWith('image/')) {
                     resultImage.src = URL.createObjectURL(blob);
                     resultImage.classList.remove('hidden');
                     statusMessage.classList.add('hidden');
                 } else {
-                    // Handle cases where the API returns an OK status but not an image
                     throw new Error("The API did not return a valid image. Please check your prompt and try again.");
                 }
-
             } catch (error) {
                 console.error("Image generation failed:", error);
                 displayError(error.message);
             } finally {
-                // Hide the spinner, but leave the status/error message
                 loadingSpinner.classList.add('hidden');
             }
         }
 
-        /**
-         * Handles the video generation form submission
-         * @param {Event} e - The form submission event
-         */
-        async function handleVideoGeneration(e) {
+        function handleVideoGeneration(e) {
             e.preventDefault();
-            // This is a placeholder to show the UI.
-            // Real video generation APIs are more complex, often requiring an initial image
-            // and having a different workflow (e.g., polling for results).
             displayError("Video generation is a complex feature. This UI is a demonstration and the video generation API call is not implemented in this version.");
         }
 
