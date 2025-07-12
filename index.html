@@ -178,8 +178,8 @@
 
         // API Call Logic
         async function queryAPI(apiUrl, prompt) {
-            if (API_TOKEN === '%%HF_TOKEN%%') {
-                throw new Error("API Token not configured. Please set up the HF_TOKEN secret in your repository.");
+            if (API_TOKEN === '%%HF_TOKEN%%' || !API_TOKEN) {
+                throw new Error("API Token not configured. Check repository secrets and workflow file.");
             }
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -252,3 +252,8 @@
 </body>
 </html>
 
+Important: For this to work, please double-check that your existing workflow file contains a step to replace the token. It should look something like this:
+- name: Replace Token Placeholder
+  run: sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
+
+If your workflow file has this step, you are ready to go. Just commit and push the new index.html file to your main branch, and GitHub Actions will handle the rest.
