@@ -1,8 +1,8 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Simple workflow to build and deploy a static HTML site to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes to the main branch
   push:
     branches: ["main"]
 
@@ -31,13 +31,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Replace Token Placeholder
+        # This command finds the '%%HF_TOKEN%%' placeholder in your index.html
+        # and replaces it with the secret value you configured in your repository.
+        run: |
+          sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
+          
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
+          # Upload the entire repository
           path: '.'
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
