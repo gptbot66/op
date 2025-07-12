@@ -33,24 +33,6 @@
             box-shadow: 0 0 20px rgba(192, 38, 211, 0.5);
             transform: translateY(-2px);
         }
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #c026d3;
-            transition: width 0.3s ease;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-        }
         #loading-spinner {
             border-top-color: #4f46e5;
         }
@@ -85,7 +67,6 @@
     <main class="flex-grow">
         <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             
-            <!-- Hero Section -->
             <div class="text-center mb-12">
                 <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
                     Create Stunning <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-500">AI Illusions</span>
@@ -95,12 +76,9 @@
                 </p>
             </div>
 
-            <!-- Generator Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                 
-                <!-- Controls Column with Tabs -->
                 <div class="glass-card rounded-xl p-6 shadow-lg">
-                    <!-- Tab Navigation -->
                     <div class="mb-6 border-b border-gray-700">
                         <nav class="-mb-px flex space-x-6" aria-label="Tabs">
                             <button id="tab-image" class="tab-button active whitespace-nowrap py-4 px-1 text-base font-medium text-gray-300 hover:text-white">Image Generator</button>
@@ -108,17 +86,11 @@
                         </nav>
                     </div>
 
-                    <!-- Image Generator Form -->
                     <div id="content-image">
                         <form id="image-form" class="space-y-4">
                             <div>
                                 <label for="prompt" class="block text-sm font-medium text-gray-300">Prompt</label>
                                 <textarea id="prompt" name="prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A spiral staircase that transforms into a galaxy, hyperrealistic"></textarea>
-                            </div>
-                            <div>
-                                <label for="hf-token" class="block text-sm font-medium text-gray-300">Hugging Face Token</label>
-                                <input type="password" id="hf-token" name="hf-token" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="Paste your token here (e.g., hf_...)">
-                                <p class="mt-1 text-xs text-gray-500">Your token is sent directly to the API and is not stored.</p>
                             </div>
                             <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">
                                 Generate Image
@@ -126,16 +98,11 @@
                         </form>
                     </div>
 
-                    <!-- Video Generator Form (Initially Hidden) -->
                     <div id="content-video" class="hidden">
                         <form id="video-form" class="space-y-4">
                             <div>
                                 <label for="video-prompt" class="block text-sm font-medium text-gray-300">Video Prompt</label>
                                 <textarea id="video-prompt" name="video-prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A time-lapse of a city built from clouds"></textarea>
-                            </div>
-                            <div>
-                                <label for="video-hf-token" class="block text-sm font-medium text-gray-300">Hugging Face Token</label>
-                                <input type="password" id="video-hf-token" name="video-hf-token" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="Paste your token here (e.g., hf_...)">
                             </div>
                             <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">
                                 Generate Video
@@ -144,7 +111,6 @@
                     </div>
                 </div>
 
-                <!-- Display Column -->
                 <div id="gallery" class="glass-card rounded-xl p-4 shadow-lg min-h-[400px] md:min-h-[512px] flex items-center justify-center">
                     <div id="artwork-display" class="w-full h-full flex flex-col items-center justify-center">
                         <div id="loading-spinner" class="hidden animate-spin rounded-full h-16 w-16 border-4 border-gray-600 border-t-indigo-500 mb-4"></div>
@@ -158,7 +124,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-900/50 border-t border-gray-700/50 mt-16">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
             <p>&copy; 2025 Illusion Diffusion HQ. All rights reserved.</p>
@@ -166,11 +131,21 @@
     </footer>
 
     <script>
-        // DOM element references
+        // --- Configuration ---
+        // IMPORTANT: Your API token is placed here. While this hides it from the UI,
+        // it is still visible to anyone who inspects the page's source code.
+        // For a true production app, use a backend proxy to secure your token.
+        const API_TOKEN = "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";
+
+        // API Endpoints
+        const IMAGE_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0";
+        const VIDEO_API_URL = "https://api-inference.huggingface.co/models/ModelScope/text-to-video-ms-1.7b";
+
+        // --- DOM Element References ---
         const imageForm = document.getElementById('image-form');
         const videoForm = document.getElementById('video-form');
         const promptInput = document.getElementById('prompt');
-        const tokenInput = document.getElementById('hf-token');
+        const videoPromptInput = document.getElementById('video-prompt');
         
         const loadingSpinner = document.getElementById('loading-spinner');
         const statusMessage = document.getElementById('status-message');
@@ -183,10 +158,7 @@
         const contentImage = document.getElementById('content-image');
         const contentVideo = document.getElementById('content-video');
 
-        // API Configuration
-        const IMAGE_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0";
-
-        // Tab switching logic
+        // --- Tab Switching Logic ---
         tabImage.addEventListener('click', () => {
             tabImage.classList.add('active');
             tabVideo.classList.remove('active');
@@ -201,6 +173,7 @@
             contentImage.classList.add('hidden');
         });
 
+        // --- UI Helper Functions ---
         function clearDisplay() {
             statusMessage.textContent = 'Your generated artwork will appear here.';
             statusMessage.classList.remove('hidden');
@@ -211,9 +184,10 @@
             resultVideo.src = '';
         }
 
-        function setLoading(isLoading) {
+        function setLoading(isLoading, message = 'Generating...') {
             if (isLoading) {
                 clearDisplay();
+                statusMessage.textContent = message;
                 loadingSpinner.classList.remove('hidden');
             } else {
                 loadingSpinner.classList.add('hidden');
@@ -227,69 +201,86 @@
             errorMessage.classList.remove('hidden');
         }
 
+        // --- API Call Logic ---
+        async function queryAPI(apiUrl, prompt) {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${API_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ inputs: prompt })
+            });
+
+            if (!response.ok) {
+                let errorMsg = `API Error: ${response.status} ${response.statusText}`;
+                try {
+                    const errorBody = await response.json();
+                    if (errorBody.error) {
+                       errorMsg = `API Error: ${errorBody.error}`;
+                       if (errorBody.estimated_time) {
+                           errorMsg += ` The model is currently loading. Please try again in about ${Math.ceil(errorBody.estimated_time)} seconds.`;
+                       }
+                    }
+                } catch (e) { /* Ignore parsing error */ }
+                throw new Error(errorMsg);
+            }
+            return response.blob();
+        }
+
+        // --- Event Handlers ---
         async function handleImageGeneration(e) {
             e.preventDefault();
             const prompt = promptInput.value.trim();
-            const token = tokenInput.value.trim();
-
             if (!prompt) {
                 displayError("Please enter a prompt for the image.");
                 return;
             }
-            if (!token) {
-                displayError("Please provide your Hugging Face token.");
-                return;
-            }
             
-            setLoading(true);
-            statusMessage.textContent = 'Generating... The model might be loading, which can take a minute.';
+            setLoading(true, 'Generating image...');
 
             try {
-                const response = await fetch(IMAGE_API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ inputs: prompt })
-                });
-
-                if (!response.ok) {
-                    let errorMsg = `API Error: ${response.status} ${response.statusText}`;
-                    try {
-                        const errorBody = await response.json();
-                        if (errorBody.error) {
-                           errorMsg = `API Error: ${errorBody.error}`;
-                           if (errorBody.estimated_time) {
-                               errorMsg += ` The model is currently loading. Please try again in about ${Math.ceil(errorBody.estimated_time)} seconds.`;
-                           }
-                        }
-                    } catch (parseError) {
-                        // Could not parse JSON, stick with the original status text.
-                    }
-                    throw new Error(errorMsg);
-                }
-
-                const blob = await response.blob();
-                
+                const blob = await queryAPI(IMAGE_API_URL, prompt);
                 if (blob.type.startsWith('image/')) {
                     resultImage.src = URL.createObjectURL(blob);
                     resultImage.classList.remove('hidden');
                     statusMessage.classList.add('hidden');
                 } else {
-                    throw new Error("The API did not return a valid image. Please check your prompt and try again.");
+                    throw new Error("The API did not return a valid image.");
                 }
             } catch (error) {
                 console.error("Image generation failed:", error);
                 displayError(error.message);
             } finally {
-                loadingSpinner.classList.add('hidden');
+                setLoading(false);
             }
         }
 
-        function handleVideoGeneration(e) {
+        async function handleVideoGeneration(e) {
             e.preventDefault();
-            displayError("Video generation is a complex feature. This UI is a demonstration and the video generation API call is not implemented in this version.");
+            const prompt = videoPromptInput.value.trim();
+            if (!prompt) {
+                displayError("Please enter a prompt for the video.");
+                return;
+            }
+
+            setLoading(true, 'Generating video... This may take some time.');
+
+            try {
+                const blob = await queryAPI(VIDEO_API_URL, prompt);
+                if (blob.type.startsWith('video/')) {
+                    resultVideo.src = URL.createObjectURL(blob);
+                    resultVideo.classList.remove('hidden');
+                    statusMessage.classList.add('hidden');
+                } else {
+                    throw new Error("The API did not return a valid video file.");
+                }
+            } catch (error) {
+                console.error("Video generation failed:", error);
+                displayError(error.message);
+            } finally {
+                setLoading(false);
+            }
         }
 
         // Attach event listeners
