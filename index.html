@@ -14,14 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Custom styles to enhance the design */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* bg-gray-900 */
-            color: #f9fafb; /* text-gray-50 */
+            background-color: #111827;
+            color: #f9fafb;
         }
         .glass-card {
-            background: rgba(31, 41, 55, 0.6); /* bg-gray-800 with opacity */
+            background: rgba(31, 41, 55, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -36,7 +35,6 @@
         #loading-spinner {
             border-top-color: #4f46e5;
         }
-        /* Styles for the new tab navigation */
         .tab-button {
             transition: all 0.3s ease;
             border-bottom: 2px solid transparent;
@@ -49,14 +47,12 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Header and Navigation -->
+    <!-- Header -->
     <header class="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 sticky top-0 z-50">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c.251.023.501.05.75.082a.75.75 0 01.75.75v5.714a2.25 2.25 0 00.659 1.591L14.25 14.5M9.75 3.104a11.938 11.938 0 00-4.5 1.052A11.999 11.999 0 00.5 12c0 5.942 4.057 10.933 9.563 11.894a11.965 11.965 0 002.387.106c6.403 0 11.5-5.162 11.5-11.5 0-2.233-.636-4.32-1.743-6.044A11.96 11.96 0 0014.25 3.104m-4.5 0c.251.023.501.05.75.082m0 0a.75.75 0 01.75.75M14.25 3.104c-.251.023-.501.05-.75.082m0 0a.75.75 0 00-.75.75m2.25 0V9.118a2.25 2.25 0 01.659 1.591L19 14.5M14.25 3.104a11.938 11.938 0 014.5 1.052A11.999 11.999 0 0123.5 12c0 5.942-4.057 10.933-9.563 11.894a11.965 11.965 0 01-2.387.106c-6.403 0-11.5-5.162-11.5-11.5 0-2.233.636-4.32 1.743-6.044A11.96 11.96 0 019.75 3.104" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c.251.023.501.05.75.082a.75.75 0 01.75.75v5.714a2.25 2.25 0 00.659 1.591L14.25 14.5M9.75 3.104a11.938 11.938 0 00-4.5 1.052A11.999 11.999 0 00.5 12c0 5.942 4.057 10.933 9.563 11.894a11.965 11.965 0 002.387.106c6.403 0 11.5-5.162 11.5-11.5 0-2.233-.636-4.32-1.743-6.044A11.96 11.96 0 0014.25 3.104m-4.5 0c.251.023.501.05.75.082m0 0a.75.75 0 01.75.75M14.25 3.104c-.251.023-.501.05-.75.082m0 0a.75.75 0 00-.75.75m2.25 0V9.118a2.25 2.25 0 01.659 1.591L19 14.5M14.25 3.104a11.938 11.938 0 014.5 1.052A11.999 11.999 0 0123.5 12c0 5.942-4.057 10.933-9.563 11.894a11.965 11.965 0 01-2.387.106c-6.403 0-11.5-5.162-11.5-11.5 0-2.233.636-4.32 1.743-6.044A11.96 11.96 0 019.75 3.104" /></svg>
                     <span class="font-bold text-xl text-white">Illusion Diffusion HQ</span>
                 </div>
             </div>
@@ -66,51 +62,38 @@
     <!-- Main Content -->
     <main class="flex-grow">
         <div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            
             <div class="text-center mb-12">
                 <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white">
                     Create Stunning <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-500">AI Illusions</span>
                 </h1>
-                <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400">
-                    Your central hub for generating breathtaking artwork and videos with Stable Diffusion.
-                </p>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                
                 <div class="glass-card rounded-xl p-6 shadow-lg">
                     <div class="mb-6 border-b border-gray-700">
                         <nav class="-mb-px flex space-x-6" aria-label="Tabs">
-                            <button id="tab-image" class="tab-button active whitespace-nowrap py-4 px-1 text-base font-medium text-gray-300 hover:text-white">Image Generator</button>
-                            <button id="tab-video" class="tab-button whitespace-nowrap py-4 px-1 text-base font-medium text-gray-300 hover:text-white">Video Generator</button>
+                            <button id="tab-image" class="tab-button active whitespace-nowrap py-4 px-1 text-base font-medium">Image Generator</button>
+                            <button id="tab-video" class="tab-button whitespace-nowrap py-4 px-1 text-base font-medium">Video Generator</button>
                         </nav>
                     </div>
-
                     <div id="content-image">
                         <form id="image-form" class="space-y-4">
                             <div>
                                 <label for="prompt" class="block text-sm font-medium text-gray-300">Prompt</label>
-                                <textarea id="prompt" name="prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A spiral staircase that transforms into a galaxy, hyperrealistic"></textarea>
+                                <textarea id="prompt" name="prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A spiral staircase that transforms into a galaxy..."></textarea>
                             </div>
-                            <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">
-                                Generate Image
-                            </button>
+                            <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">Generate Image</button>
                         </form>
                     </div>
-
                     <div id="content-video" class="hidden">
                         <form id="video-form" class="space-y-4">
                             <div>
                                 <label for="video-prompt" class="block text-sm font-medium text-gray-300">Video Prompt</label>
-                                <textarea id="video-prompt" name="video-prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A time-lapse of a city built from clouds"></textarea>
+                                <textarea id="video-prompt" name="video-prompt" rows="4" class="mt-1 block w-full bg-gray-900/50 border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2" placeholder="e.g., A time-lapse of a city built from clouds..."></textarea>
                             </div>
-                            <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">
-                                Generate Video
-                            </button>
+                            <button type="submit" class="w-full btn-primary font-bold py-2.5 px-4 rounded-md text-white flex items-center justify-center">Generate Video</button>
                         </form>
                     </div>
                 </div>
-
                 <div id="gallery" class="glass-card rounded-xl p-4 shadow-lg min-h-[400px] md:min-h-[512px] flex items-center justify-center">
                     <div id="artwork-display" class="w-full h-full flex flex-col items-center justify-center">
                         <div id="loading-spinner" class="hidden animate-spin rounded-full h-16 w-16 border-4 border-gray-600 border-t-indigo-500 mb-4"></div>
@@ -123,7 +106,6 @@
             </div>
         </div>
     </main>
-
     <footer class="bg-gray-900/50 border-t border-gray-700/50 mt-16">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-400 text-sm">
             <p>&copy; 2025 Illusion Diffusion HQ. All rights reserved.</p>
@@ -131,34 +113,29 @@
     </footer>
 
     <script>
-        // --- Configuration ---
-        // IMPORTANT: Your API token is placed here. While this hides it from the UI,
-        // it is still visible to anyone who inspects the page's source code.
-        // For a true production app, use a backend proxy to secure your token.
-        const API_TOKEN = "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";
+        // This placeholder will be replaced by the GitHub Action.
+        const API_TOKEN = '%%HF_TOKEN%%';
 
         // API Endpoints
         const IMAGE_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0";
         const VIDEO_API_URL = "https://api-inference.huggingface.co/models/ModelScope/text-to-video-ms-1.7b";
 
-        // --- DOM Element References ---
+        // DOM Element References
         const imageForm = document.getElementById('image-form');
         const videoForm = document.getElementById('video-form');
         const promptInput = document.getElementById('prompt');
         const videoPromptInput = document.getElementById('video-prompt');
-        
         const loadingSpinner = document.getElementById('loading-spinner');
         const statusMessage = document.getElementById('status-message');
         const resultImage = document.getElementById('result-image');
         const resultVideo = document.getElementById('result-video');
         const errorMessage = document.getElementById('error-message');
-
         const tabImage = document.getElementById('tab-image');
         const tabVideo = document.getElementById('tab-video');
         const contentImage = document.getElementById('content-image');
         const contentVideo = document.getElementById('content-video');
 
-        // --- Tab Switching Logic ---
+        // Tab Switching Logic
         tabImage.addEventListener('click', () => {
             tabImage.classList.add('active');
             tabVideo.classList.remove('active');
@@ -173,15 +150,13 @@
             contentImage.classList.add('hidden');
         });
 
-        // --- UI Helper Functions ---
+        // UI Helper Functions
         function clearDisplay() {
             statusMessage.textContent = 'Your generated artwork will appear here.';
             statusMessage.classList.remove('hidden');
             resultImage.classList.add('hidden');
             resultVideo.classList.add('hidden');
             errorMessage.classList.add('hidden');
-            resultImage.src = '';
-            resultVideo.src = '';
         }
 
         function setLoading(isLoading, message = 'Generating...') {
@@ -201,8 +176,11 @@
             errorMessage.classList.remove('hidden');
         }
 
-        // --- API Call Logic ---
+        // API Call Logic
         async function queryAPI(apiUrl, prompt) {
+            if (API_TOKEN === '%%HF_TOKEN%%') {
+                throw new Error("API Token not configured. Please set up the HF_TOKEN secret in your repository.");
+            }
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
@@ -213,43 +191,35 @@
             });
 
             if (!response.ok) {
-                let errorMsg = `API Error: ${response.status} ${response.statusText}`;
+                let errorMsg = `API Error: ${response.status}`;
                 try {
                     const errorBody = await response.json();
                     if (errorBody.error) {
-                       errorMsg = `API Error: ${errorBody.error}`;
+                       errorMsg += `: ${errorBody.error}`;
                        if (errorBody.estimated_time) {
-                           errorMsg += ` The model is currently loading. Please try again in about ${Math.ceil(errorBody.estimated_time)} seconds.`;
+                           errorMsg += ` The model is loading, please try again in ${Math.ceil(errorBody.estimated_time)}s.`;
                        }
                     }
-                } catch (e) { /* Ignore parsing error */ }
+                } catch (e) { /* Ignore */ }
                 throw new Error(errorMsg);
             }
             return response.blob();
         }
 
-        // --- Event Handlers ---
+        // Event Handlers
         async function handleImageGeneration(e) {
             e.preventDefault();
             const prompt = promptInput.value.trim();
-            if (!prompt) {
-                displayError("Please enter a prompt for the image.");
-                return;
-            }
-            
+            if (!prompt) return;
             setLoading(true, 'Generating image...');
-
             try {
                 const blob = await queryAPI(IMAGE_API_URL, prompt);
                 if (blob.type.startsWith('image/')) {
                     resultImage.src = URL.createObjectURL(blob);
                     resultImage.classList.remove('hidden');
                     statusMessage.classList.add('hidden');
-                } else {
-                    throw new Error("The API did not return a valid image.");
-                }
+                } else { throw new Error("API did not return a valid image."); }
             } catch (error) {
-                console.error("Image generation failed:", error);
                 displayError(error.message);
             } finally {
                 setLoading(false);
@@ -259,24 +229,16 @@
         async function handleVideoGeneration(e) {
             e.preventDefault();
             const prompt = videoPromptInput.value.trim();
-            if (!prompt) {
-                displayError("Please enter a prompt for the video.");
-                return;
-            }
-
-            setLoading(true, 'Generating video... This may take some time.');
-
+            if (!prompt) return;
+            setLoading(true, 'Generating video...');
             try {
                 const blob = await queryAPI(VIDEO_API_URL, prompt);
                 if (blob.type.startsWith('video/')) {
                     resultVideo.src = URL.createObjectURL(blob);
                     resultVideo.classList.remove('hidden');
                     statusMessage.classList.add('hidden');
-                } else {
-                    throw new Error("The API did not return a valid video file.");
-                }
+                } else { throw new Error("API did not return a valid video."); }
             } catch (error) {
-                console.error("Video generation failed:", error);
                 displayError(error.message);
             } finally {
                 setLoading(false);
