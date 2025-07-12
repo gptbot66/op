@@ -1,4 +1,4 @@
-name: Deploy Website with API Token (Bulletproof)
+name: Deploy Website with API Token (New Method)
 
 on:
   push:
@@ -24,19 +24,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Replace API Token Placeholder
-        run: sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
-          
-      # --- NEW VALIDATION STEP ---
-      # This step checks if the placeholder still exists. If it does, the build fails.
-      - name: Validate Token Replacement
+      # --- THIS IS THE NEW, RELIABLE METHOD ---
+      # It creates a new file 'config.js' containing your secret.
+      - name: Create config.js from Secret
         run: |
-          if grep -q "%%HF_TOKEN%%" index.html; then
-            echo "::error file=index.html::Placeholder %%HF_TOKEN%% was not replaced. Check if the secret is empty or if the sed command failed."
-            exit 1
-          else
-            echo "✅ Token placeholder replaced successfully."
-          fi
+          echo "const API_TOKEN = '${{ secrets.HF_TOKEN }}';" > config.js
+          echo "✅ config.js created successfully."
           
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -44,6 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # Upload the current directory, which now includes config.js
           path: '.'
           
       - name: Deploy to GitHub Pages
