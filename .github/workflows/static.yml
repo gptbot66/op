@@ -1,65 +1,51 @@
-# Name of the workflow
-name: Deploy Website with API Token (Debug)
+name: Deploy Website with API Token (Bulletproof)
 
 on:
-  # This workflow runs automatically on any push to the 'main' branch
   push:
     branches: ["main"]
-
-  # This allows you to run the workflow manually from the Actions tab in GitHub
   workflow_dispatch:
 
-# Set the necessary permissions for the workflow to deploy to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Configure deployment settings
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # The deployment job
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Check out your repository code
       - name: Checkout
         uses: actions/checkout@v4
       
-      # --- NEW DEBUGGING STEP ---
-      # Step 2: Check if the secret is accessible by the workflow
-      - name: Verify Secret Availability
+      - name: Replace API Token Placeholder
+        run: sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
+          
+      # --- NEW VALIDATION STEP ---
+      # This step checks if the placeholder still exists. If it does, the build fails.
+      - name: Validate Token Replacement
         run: |
-          if [ -z "${{ secrets.HF_TOKEN }}" ]; then
-            echo "::error file=.github/workflows/deploy.yml,line=41::HF_TOKEN secret not found. Please verify the secret name in repository Settings > Secrets and variables > Actions."
+          if grep -q "%%HF_TOKEN%%" index.html; then
+            echo "::error file=index.html::Placeholder %%HF_TOKEN%% was not replaced. Check if the secret is empty or if the sed command failed."
             exit 1
           else
-            echo "✅ HF_TOKEN secret was found successfully."
+            echo "✅ Token placeholder replaced successfully."
           fi
           
-      # Step 3: Find the '%%HF_TOKEN%%' placeholder in index.html and replace it with your secret
-      - name: Replace API Token Placeholder
-        run: |
-          sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
-          
-      # Step 4: Set up GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
-      # Step 5: Build the artifact (your website files) to be deployed
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload the current directory (which now includes the modified index.html)
           path: '.'
           
-      # Step 6: Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
