@@ -1,4 +1,4 @@
-name: Deploy Website with API Token (New Method)
+name: Deploy Website with API Token (Cache Busting)
 
 on:
   push:
@@ -24,20 +24,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      # --- THIS IS THE NEW, RELIABLE METHOD ---
-      # It creates a new file 'config.js' containing your secret.
+      # Step 1: Create the config.js file with the secret token.
       - name: Create config.js from Secret
         run: |
           echo "const API_TOKEN = '${{ secrets.HF_TOKEN }}';" > config.js
           echo "✅ config.js created successfully."
-          
+      
+      # --- NEW CACHE-BUSTING STEP ---
+      # Step 2: Add a unique version number to the script tag in index.html
+      # This forces browsers to download the new config.js file every time.
+      - name: Add Cache-Busting to index.html
+        run: |
+          # The 'g' flag ensures it replaces all occurrences if any
+          sed -i "s|config.js|config.js?v=$(date +%s)|g" index.html
+          echo "✅ Cache-busting query added to index.html"
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload the current directory, which now includes config.js
           path: '.'
           
       - name: Deploy to GitHub Pages
