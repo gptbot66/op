@@ -52,7 +52,7 @@
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c.251.023.501.05.75.082a.75.75 0 01.75.75v5.714a2.25 2.25 0 00.659 1.591L14.25 14.5M9.75 3.104a11.938 11.938 0 00-4.5 1.052A11.999 11.999 0 00.5 12c0 5.942 4.057 10.933 9.563 11.894a11.965 11.965 0 002.387.106c6.403 0 11.5-5.162 11.5-11.5 0-2.233-.636-4.32-1.743-6.044A11.96 11.96 0 0014.25 3.104m-4.5 0c.251.023.501.05.75.082m0 0a.75.75 0 01.75.75M14.25 3.104c-.251.023-.501.05-.75.082m0 0a.75.75 0 00-.75.75m2.25 0V9.118a2.25 2.25 0 01.659 1.591L19 14.5M14.25 3.104a11.938 11.938 0 014.5 1.052A11.999 11.999 0 0123.5 12c0 5.942-4.057 10.933-9.563 11.894a11.965 11.965 0 01-2.387.106c-6.403 0-11.5-5.162-11.5-11.5 0-2.233.636-4.32 1.743-6.044A11.96 11.96 0 019.75 3.104" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c.251.023.501.05.75.082a.75.75 0 01.75.75v5.714a2.25 2.25 0 00.659 1.591L14.25 14.5M9.75 3.104a11.938 11.938 0 00-4.5 1.052A11.999 11.999 0 00.5 12c0 5.942 4.057 10.933 9.563 11.894a11.965 11.965 0 002.387.106c6.403 0 11.5-5.162 11.5-11.5 0-2.233-.636-4.32-1.743-6.044A11.96 11.96 0 0014.25 3.104m-4.5 0c.251.023.501.05.75.082m0 0a.75.75 0 01.75.75M14.25 3.104c-.251.023-.501.05-.75.082m0 0a.75.75 0 00-.75.75m2.25 0V9.118a2.25 2.25 0 01.659 1.591L19 14.5M14.25 3.104a11.938 11.938 0 014.5 1.052A11.999 11.999 0 0123.5 12c0 5.942-4.057 10.933-9.563 11.894a11.965 11.965 0 01-2.387.106c-6.403 0-11.5-5.162-11.5-11.5 0-2.233-.636-4.32 1.743-6.044A11.96 11.96 0 019.75 3.104" /></svg>
                     <span class="font-bold text-xl text-white">Illusion Diffusion HQ</span>
                 </div>
             </div>
@@ -252,8 +252,3 @@
 </body>
 </html>
 
-Important: For this to work, please double-check that your existing workflow file contains a step to replace the token. It should look something like this:
-- name: Replace Token Placeholder
-  run: sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
-
-If your workflow file has this step, you are ready to go. Just commit and push the new index.html file to your main branch, and GitHub Actions will handle the rest.
