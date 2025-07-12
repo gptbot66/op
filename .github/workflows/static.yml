@@ -1,52 +1,57 @@
-# Simple workflow to build and deploy a static HTML site to GitHub Pages
-name: Deploy to GitHub Pages
+# Name of the workflow
+name: Deploy Website with API Token
 
 on:
-  # Runs on pushes to the main branch
+  # This workflow runs automatically on any push to the 'main' branch
   push:
     branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # This allows you to run the workflow manually from the Actions tab in GitHub
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Set the necessary permissions for the workflow to deploy to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Configure deployment settings
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  # The deployment job
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Check out your repository code
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Replace Token Placeholder
-        # This command finds the '%%HF_TOKEN%%' placeholder in your index.html
-        # and replaces it with the secret value you configured in your repository.
+      # --- THIS IS THE CRITICAL STEP THAT FIXES THE ERROR ---
+      # Step 2: Find the '%%HF_TOKEN%%' placeholder in index.html and replace it with your secret
+      - name: Replace API Token Placeholder
         run: |
           sed -i "s|%%HF_TOKEN%%|${{ secrets.HF_TOKEN }}|g" index.html
+        # This command uses the 'sed' utility to perform the search-and-replace.
+        # It reads the value from the secret named HF_TOKEN that you configured in your repository settings.
           
+      # Step 3: Set up GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
         
+      # Step 4: Build the artifact (your website files) to be deployed
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload the entire repository
+          # Upload the current directory (which now includes the modified index.html)
           path: '.'
           
+      # Step 5: Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
